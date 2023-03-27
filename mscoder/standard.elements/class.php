@@ -1,5 +1,6 @@
-<?
-if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+<? if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
+    die();
+}
 
 class StandardElementsComponent extends \CBitrixComponent
 {
@@ -27,10 +28,10 @@ class StandardElementsComponent extends \CBitrixComponent
 	protected function setSefDefaultParams()
 	{
 		$this->defaultUrlTemplates404 = array(
-		    'index' => 'index.php',
-		    'detail' => 'detail/#ELEMENT_ID#/'
+		    'index' => '',
+		    'detail' => '#ELEMENT_ID#/'
 		);
-		$this->componentVariables = array('ELEMENT_ID');
+		$this->componentVariables = array('ELEMENT_ID', 'ELEMENT_CODE', 'SECTION_ID', 'SECTION_CODE');
 	}
 	
 	/**
@@ -39,6 +40,8 @@ class StandardElementsComponent extends \CBitrixComponent
 	protected function getResult()
 	{
 		$urlTemplates = array();
+        $variables = array();
+        $variableAliases = array();
 		if ($this->arParams['SEF_MODE'] == 'Y')
 		{
 			$variables = array();
@@ -102,4 +105,3 @@ class StandardElementsComponent extends \CBitrixComponent
 		}
 	}
 }
-?>

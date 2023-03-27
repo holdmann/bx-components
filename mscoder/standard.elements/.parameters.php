@@ -14,18 +14,16 @@ try
 	$iblockTypes = \CIBlockParameters::GetIBlockTypes(Array("-" => " "));
 	
 	$iblocks = array(0 => " ");
-    $iblocksCode = array("" => " ");
 	if (isset($arCurrentValues['IBLOCK_TYPE']) && strlen($arCurrentValues['IBLOCK_TYPE']))
 	{
 	    $filter = array(
 	        'TYPE' => $arCurrentValues['IBLOCK_TYPE'],
 	        'ACTIVE' => 'Y'
 	    );
-	    $iterator = \CIBlock::GetList(array('SORT' => 'ASC'), $filter);
-	    while ($iblock = $iterator->GetNext())
+	    $iterator = Main\IblockTable::getList(['filter' => $filter, 'order' => ['SORT' => 'ASC']]);
+	    while ($iblock = $iterator->Fetch())
 	    {
 	        $iblocks[$iblock['ID']] = $iblock['NAME'];
-            $iblocksCode[$iblock['CODE']] = $iblock['NAME'];
 	    }
 	}
 	
@@ -59,12 +57,6 @@ try
 				'TYPE' => 'LIST',
 				'VALUES' => $iblocks
 			),
-            'IBLOCK_CODE' => array(
-                'PARENT' => 'BASE',
-                'NAME' => Loc::getMessage('STANDARD_ELEMENTS_PARAMETERS_IBLOCK_CODE'),
-                'TYPE' => 'LIST',
-                'VALUES' => $iblocksCode
-            ),
 			'SHOW_NAV' => array(
 				'PARENT' => 'BASE',
 				'NAME' => Loc::getMessage('STANDARD_ELEMENTS_PARAMETERS_SHOW_NAV'),
@@ -104,13 +96,13 @@ try
 			'SEF_MODE' => array(
 	            'index' => array(
 	                'NAME' => GetMessage('STANDARD_ELEMENTS_PARAMETERS_INDEX_PAGE'),
-	                'DEFAULT' => 'index.php',
+	                'DEFAULT' => '',
 	                'VARIABLES' => array()
 	            ),
 	            'detail' => array(
 	            	"NAME" => GetMessage('STANDARD_ELEMENTS_PARAMETERS_DETAIL_PAGE'),
 	                "DEFAULT" => '#ELEMENT_ID#/',
-	                "VARIABLES" => array('ELEMENT_ID')
+	                "VARIABLES" => array('ELEMENT_ID', 'ELEMENT_CODE', 'SECTION_ID', 'SECTION_CODE')
 				)
 	        ),
 			'CACHE_TIME' => array(
@@ -123,4 +115,3 @@ catch (Main\LoaderException $e)
 {
 	ShowError($e->getMessage());
 }
-?>
